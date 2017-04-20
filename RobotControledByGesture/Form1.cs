@@ -73,9 +73,7 @@ namespace RobotControledByGesture
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             button3.Visible = true;
-
             button4.Visible = true;
         }
     }

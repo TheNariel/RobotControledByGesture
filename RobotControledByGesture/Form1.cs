@@ -31,7 +31,7 @@ namespace RobotControledByGesture
         private void Form1_Load(object sender, EventArgs e)
         {
             R  = new Robot();
-            R.InitializeRobotAsync("COM8");
+           // R.InitializeRobotAsync("COM8");
 
             webcam = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             foreach (FilterInfo VideoCaptureDevice in webcam)

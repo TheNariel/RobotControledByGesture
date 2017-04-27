@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using RobotControledByGesture.Lego;
 using AForge.Video;
 using AForge.Video.DirectShow;
+using AForge.Imaging.Filters;
 
 namespace RobotControledByGesture
 {
@@ -59,8 +60,15 @@ namespace RobotControledByGesture
 
         void Cam_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
+            // create grayscale filter (BT709)
+            Grayscale filter = new Grayscale(0.2125, 0.7154, 0.0721);
+            // apply the filter
+         
+
+
             Bitmap bit = (Bitmap)eventArgs.Frame.Clone();
-            pictureBox1.Image = bit;
+            Bitmap grayImage = filter.Apply(bit);
+            pictureBox1.Image = grayImage;
         }
 
         private void button4_Click(object sender, EventArgs e)

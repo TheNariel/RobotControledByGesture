@@ -11,12 +11,14 @@ using RobotControledByGesture.Lego;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using AForge.Imaging.Filters;
+using System.Drawing.Imaging;
+using AForge;
 
 namespace RobotControledByGesture
 {
     public partial class Form1 : Form
     {
-       
+        int Treshold =100;
         Robot R;
         public Form1()
         {
@@ -60,14 +62,16 @@ namespace RobotControledByGesture
 
         void Cam_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            // create grayscale filter (BT709)
-            Grayscale filter = new Grayscale(0.2125, 0.7154, 0.0721);
-            // apply the filter
-         
+            Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone();
 
+            Threshold filter = new Threshold(Treshold);
+            Grayscale GRfilter = new Grayscale(0.2125, 0.7154, 0.0721);
+            var Mir = new Mirror(false, true);
 
-            Bitmap bit = (Bitmap)eventArgs.Frame.Clone();
-            Bitmap grayImage = filter.Apply(bit);
+            Mir.ApplyInPlace(bitmap);
+            Bitmap grayImage = GRfilter.Apply(bitmap);
+            filter.ApplyInPlace(grayImage);
+
             pictureBox1.Image = grayImage;
         }
 
@@ -83,6 +87,19 @@ namespace RobotControledByGesture
         {
             button3.Visible = true;
             button4.Visible = true;
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            Treshold = (int)numericUpDown1.Value;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (cam.IsRunning)
+            {
+                cam.Stop();
+            }
         }
     }
 }

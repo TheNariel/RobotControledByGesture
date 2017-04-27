@@ -74,6 +74,16 @@ namespace RobotControledByGesture
             Bitmap grayImage = GRfilter.Apply(bitmap);
             filter.ApplyInPlace(grayImage);
 
+            // create filter
+            BlobsFiltering blobsizefilter = new BlobsFiltering();
+            // configure filter
+            blobsizefilter.CoupledSizeFiltering = true;
+            blobsizefilter.MinWidth = 70;
+            blobsizefilter.MinHeight = 70;
+            // apply the filter
+            filter.ApplyInPlace(grayImage);
+
+
             // process image with blob counter
             BlobCounter blobCounter = new BlobCounter();
             blobCounter.ProcessImage(grayImage);

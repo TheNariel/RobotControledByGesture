@@ -58,6 +58,9 @@
     <Reference Include="AForge.Imaging">
       <HintPath>dll\AForge.Imaging.dll</HintPath>
     </Reference>
+    <Reference Include="AForge.Math">
+      <HintPath>..\..\..\..\..\Desktop\skola\Release\AForge.Math.dll</HintPath>
+    </Reference>
     <Reference Include="AForge.Video, Version=2.2.5.0, Culture=neutral, PublicKeyToken=cbfb6e07d173c401, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\AForge.Video.dll</HintPath>

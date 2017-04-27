@@ -37,9 +37,7 @@ namespace RobotControledByGesture.Lego
 
         public async void LeftAsync()
         {
-            //await brick.DirectCommand.StartMotorAsync(OutputPort.All);
-            //await brick.DirectCommand.TurnMotorAtPowerAsync(OutputPort.B, -40);
-            //await brick.DirectCommand.TurnMotorAtPowerAsync(OutputPort.A, +40);
+          
         
             await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.B, -30, 500, false);
             await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, +30, 500, false);
@@ -49,9 +47,7 @@ namespace RobotControledByGesture.Lego
 
         public async void RightAsync()
         {
-            //await brick.DirectCommand.StartMotorAsync(OutputPort.All);
-            //await brick.DirectCommand.TurnMotorAtPowerAsync(OutputPort.A, -40);
-            //await brick.DirectCommand.TurnMotorAtPowerAsync(OutputPort.B, +40);
+           
             await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, -30, 500, false);
             await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.B, +30, 500, false);
             Debug.WriteLine("Robot goes right.");
@@ -61,8 +57,6 @@ namespace RobotControledByGesture.Lego
         {
             await brick.DirectCommand.PlayToneAsync(10, 500, 200);
 
-            // await brick.DirectCommand.StartMotorAsync(OutputPort.All);
-            // await brick.DirectCommand.TurnMotorAtPowerAsync(OutputPort.All, 40);
          //   await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.All, 40, 500, false);
             Debug.WriteLine("Robot goes forward.");
        }

@@ -13,6 +13,8 @@ using AForge.Video.DirectShow;
 using AForge.Imaging.Filters;
 using System.Drawing.Imaging;
 using AForge;
+using AForge.Imaging;
+using AForge.Math.Geometry;
 
 namespace RobotControledByGesture
 {
@@ -71,6 +73,39 @@ namespace RobotControledByGesture
             Mir.ApplyInPlace(bitmap);
             Bitmap grayImage = GRfilter.Apply(bitmap);
             filter.ApplyInPlace(grayImage);
+
+            // process image with blob counter
+            BlobCounter blobCounter = new BlobCounter();
+            blobCounter.ProcessImage(grayImage);
+            Blob[] blobs = blobCounter.GetObjectsInformation();
+
+            // create convex hull searching algorithm
+            GrahamConvexHull hullFinder = new GrahamConvexHull();
+
+            // lock image to draw on it
+            BitmapData data = grayImage.LockBits(
+                new Rectangle(0, 0, grayImage.Width, grayImage.Height),
+                    ImageLockMode.ReadWrite, grayImage.PixelFormat);
+
+            // process each blob
+            foreach (Blob blob in blobs)
+            {
+                List<IntPoint> leftPoints, rightPoints, edgePoints = new List<IntPoint>();
+
+                // get blob's edge points
+                blobCounter.GetBlobsLeftAndRightEdges(blob,
+                    out leftPoints, out rightPoints);
+
+                edgePoints.AddRange(leftPoints);
+                edgePoints.AddRange(rightPoints);
+
+                // blob's convex hull
+                List<IntPoint> hull = hullFinder.FindHull(edgePoints);
+
+                Drawing.Polygon(data, hull, Color.Red);
+            }
+
+            grayImage.UnlockBits(data);
 
             pictureBox1.Image = grayImage;
         }

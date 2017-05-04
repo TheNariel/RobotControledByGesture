@@ -15,6 +15,7 @@ using System.Drawing.Imaging;
 using AForge;
 using AForge.Imaging;
 using AForge.Math.Geometry;
+using System.Diagnostics;
 
 namespace RobotControledByGesture
 {
@@ -28,7 +29,6 @@ namespace RobotControledByGesture
             InitializeComponent();
 
         }
-        Boolean active = true;
         private FilterInfoCollection webcam;
         private VideoCaptureDevice cam;
 
@@ -36,7 +36,7 @@ namespace RobotControledByGesture
         private void Form1_Load(object sender, EventArgs e)
         {
             R = new Robot();
-           // R.InitializeRobotAsync("COM4");
+            R.InitializeRobotAsync("COM7");
 
             webcam = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             foreach (FilterInfo VideoCaptureDevice in webcam)
@@ -49,6 +49,8 @@ namespace RobotControledByGesture
         private void button3_Click(object sender, EventArgs e)
         {
             cam = new VideoCaptureDevice(webcam[comboBox1.SelectedIndex].MonikerString);
+            //Resolution Number 0 {Width=640, Height=480}
+            cam.VideoResolution = cam.VideoCapabilities[0];
             cam.NewFrame += new NewFrameEventHandler(Cam_NewFrame);
             cam.Start();
         }
@@ -59,16 +61,19 @@ namespace RobotControledByGesture
 
             Threshold filter = new Threshold(Treshold);
             Grayscale GRfilter = new Grayscale(0.2125, 0.7154, 0.0721);
-            EuclideanColorFiltering euclidFilter = new EuclideanColorFiltering(new RGB(186,187,209), 120);
+            EuclideanColorFiltering euclidFilter = new EuclideanColorFiltering(new RGB(186, 187, 209), 120);
             var Mir = new Mirror(false, true);
 
             Mir.ApplyInPlace(bitmap);
-            euclidFilter.ApplyInPlace(bitmap);
-            Bitmap grayImage = GRfilter.Apply(bitmap);
+
+            Rectangle cloneRect = new Rectangle(0, 0, 320, 240);
+            PixelFormat format =
+                 bitmap.PixelFormat;
+            Bitmap cloneBitmap = bitmap.Clone(cloneRect, format);
+
+            euclidFilter.ApplyInPlace(cloneBitmap);
+            Bitmap grayImage = GRfilter.Apply(cloneBitmap);
             filter.ApplyInPlace(grayImage);
-
-
-
 
 
             // process image with blob counter
@@ -84,34 +89,35 @@ namespace RobotControledByGesture
 
             // create convex hull searching algorithm
             GrahamConvexHull hullFinder = new GrahamConvexHull();
+            if (blobs.Length > 0)
+            {
+                // lock image to draw on it
+                BitmapData data = grayImage.LockBits(
+                    new Rectangle(0, 0, grayImage.Width, grayImage.Height),
+                        ImageLockMode.ReadWrite, grayImage.PixelFormat);
 
-            // lock image to draw on it
-            BitmapData data = grayImage.LockBits(
-                new Rectangle(0, 0, grayImage.Width, grayImage.Height),
-                    ImageLockMode.ReadWrite, grayImage.PixelFormat);
+                Blob blob = blobs[0];
 
-            Blob blob = blobs[0];
+                List<IntPoint> leftPoints, rightPoints, edgePoints = new List<IntPoint>();
 
-            List<IntPoint> leftPoints, rightPoints, edgePoints = new List<IntPoint>();
+                // get blob's edge points
+                blobCounter.GetBlobsLeftAndRightEdges(blob,
+                    out leftPoints, out rightPoints);
 
-            // get blob's edge points
-            blobCounter.GetBlobsLeftAndRightEdges(blob,
-                out leftPoints, out rightPoints);
+                edgePoints.AddRange(leftPoints);
+                edgePoints.AddRange(rightPoints);
 
-            edgePoints.AddRange(leftPoints);
-            edgePoints.AddRange(rightPoints);
+                // blob's convex hull
+                List<IntPoint> hull = hullFinder.FindHull(edgePoints);
+                IntPoint middle = getMiddle(hull);
+                handleHull(hull, middle);
 
-            // blob's convex hull
-            List<IntPoint> hull = hullFinder.FindHull(edgePoints);
-            //IntPoint middle = getMiddle(hull);
-            //handleHull(hull, middle);
-
-            //Drawing.FillRectangle(data, new Rectangle(middle.X, middle.Y, 10, 10), Color.Red);
-            Drawing.Polygon(data, hull, Color.Red);
+                Drawing.FillRectangle(data, new Rectangle(middle.X, middle.Y, 10, 10), Color.Red);
+                Drawing.Polygon(data, hull, Color.Red);
 
 
-            grayImage.UnlockBits(data);
-
+                grayImage.UnlockBits(data);
+            }
             pictureBox1.Image = grayImage;
         }
         private IntPoint getMiddle(List<IntPoint> hull)
@@ -121,34 +127,80 @@ namespace RobotControledByGesture
             foreach (IntPoint h in hull)
             {
                 Mx += h.X;
-                My += h.Y;
             }
+
             Mx = Mx / hull.Count;
-            My = My / hull.Count;
+            My = (hull[hull.Count / 2].Y + hull[(hull.Count / 2) - 1].Y + hull[(hull.Count / 2) + 1].Y) / 3;
             ret = new IntPoint(Mx, My);
             return ret;
         }
 
         private void handleHull(List<IntPoint> hull, IntPoint middle)
         {
-            List<int> distances = new List<int>();
-            int x;
-            foreach (IntPoint P in hull)
+            if (hull != null)
             {
-                x = middle.X - P.X;
-                x = Math.Abs(x);
-                distances.Add(x);
-            }
-            distances.Sort();
-            if (distances.First() > 30)
-            {
-               // R.ForwardAsync();
-            }
-            else
-            {
-               // R.StopMoving();
-            }
+                List<int> Y = new List<int>();
+                List<int> X = new List<int>();
+                foreach (IntPoint P in hull)
+                {                    
+                    Y.Add(P.Y);
+                    X.Add(P.X);
+                }
+                Y.Sort();
+                X.Sort();
+                int diffXMax = Math.Abs(middle.X - X.First());
+                int diffXMin = Math.Abs(middle.X - X.Last());
+                int distance = Math.Abs(Y.Last()- Y.First());
+                int diff = diffXMax - diffXMin;
+                Debug.Print(distance.ToString());
 
+                if (distance > 150)
+                {//Runn
+                    if (diff > -20 && diff < 20)
+                    {
+                          R.ForwardAsync();
+                        Debug.Print("run");
+                    }
+                    else
+                    {
+
+                        if (diff > 0)
+                        {
+                            R.LeftRunAsync();
+                            Debug.Print("Run + Left");
+                        }
+                        else
+                        {
+                            R.RightRunAsync();
+                            Debug.Print("Run + Right");
+                        }
+                    }
+                }
+                else
+                {//Stop
+                    if (diff > -20 && diff < 20)
+                    {
+                        R.StopMoving();
+                        Debug.Print("Stup");
+                    }
+                    else
+                    {
+
+                        if (diff > 0)
+                        {
+                            R.LeftAsync();
+                            Debug.Print("Stop + Left");
+                        }
+                        else
+                        {
+                            R.RightAsync();
+                            Debug.Print("Stop + Right");
+                        }
+                    };
+                }
+               
+
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -172,7 +224,7 @@ namespace RobotControledByGesture
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (cam!=null && cam.IsRunning)
+            if (cam != null && cam.IsRunning)
             {
                 cam.Stop();
             }

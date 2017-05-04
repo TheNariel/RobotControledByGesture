@@ -29,8 +29,8 @@ namespace RobotControledByGesture.Lego
     
         public async void StopMoving()
         {
-            await brick.DirectCommand.PlayToneAsync(10, 100, 200);
-         //   await brick.DirectCommand.StopMotorAsync(OutputPort.All, true);
+          //  await brick.DirectCommand.PlayToneAsync(10, 100, 200);
+            await brick.DirectCommand.StopMotorAsync(OutputPort.All, true);
             Debug.WriteLine("Robot stops moving.");
         }
 
@@ -39,7 +39,7 @@ namespace RobotControledByGesture.Lego
         {
           
         
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.B, -30, 500, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, -30, 500, false);
             await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, +30, 500, false);
 
             Debug.WriteLine("Robot goes left.");
@@ -49,15 +49,31 @@ namespace RobotControledByGesture.Lego
         {
            
             await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, -30, 500, false);
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.B, +30, 500, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, +30, 500, false);
             Debug.WriteLine("Robot goes right.");
         }
+        public async void LeftRunAsync()
+        {
 
+
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, 10, 500, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, +50, 500, false);
+
+            Debug.WriteLine("Robot goes left.");
+        }
+
+        public async void RightRunAsync()
+        {
+
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, 10, 500, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, +50, 500, false);
+            Debug.WriteLine("Robot goes right.");
+        }
         public async void ForwardAsync()
         {
-            await brick.DirectCommand.PlayToneAsync(10, 500, 200);
+           // await brick.DirectCommand.PlayToneAsync(10, 500, 200);
 
-         //   await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.All, 40, 500, false);
+           await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.All, 40, 500, false);
             Debug.WriteLine("Robot goes forward.");
        }
 

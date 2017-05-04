@@ -20,7 +20,7 @@ namespace RobotControledByGesture
 {
     public partial class Form1 : Form
     {
-        int Treshold =100;
+        int Treshold = 100;
         Robot R;
         public Form1()
         {
@@ -28,15 +28,15 @@ namespace RobotControledByGesture
             InitializeComponent();
 
         }
-
+        Boolean active = true;
         private FilterInfoCollection webcam;
         private VideoCaptureDevice cam;
 
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            R  = new Robot();
-           // R.InitializeRobotAsync("COM8");
+            R = new Robot();
+           // R.InitializeRobotAsync("COM4");
 
             webcam = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             foreach (FilterInfo VideoCaptureDevice in webcam)
@@ -65,18 +65,16 @@ namespace RobotControledByGesture
             Bitmap grayImage = GRfilter.Apply(bitmap);
             filter.ApplyInPlace(grayImage);
 
-            // create filter
-            BlobsFiltering blobsizefilter = new BlobsFiltering();
-            // configure filter
-            blobsizefilter.CoupledSizeFiltering = true;
-            blobsizefilter.MinWidth = 70;
-            blobsizefilter.MinHeight = 70;
-            // apply the filter
-            filter.ApplyInPlace(grayImage);
 
 
             // process image with blob counter
             BlobCounter blobCounter = new BlobCounter();
+            blobCounter.ObjectsOrder = ObjectsOrder.Size;
+            blobCounter.FilterBlobs = true;
+            blobCounter.MinWidth = 100;
+            blobCounter.MinHeight = 100;
+
+
             blobCounter.ProcessImage(grayImage);
             Blob[] blobs = blobCounter.GetObjectsInformation();
 
@@ -88,27 +86,65 @@ namespace RobotControledByGesture
                 new Rectangle(0, 0, grayImage.Width, grayImage.Height),
                     ImageLockMode.ReadWrite, grayImage.PixelFormat);
 
-            // process each blob
-            foreach (Blob blob in blobs)
-            {
-                List<IntPoint> leftPoints, rightPoints, edgePoints = new List<IntPoint>();
+            Blob blob = blobs[0];
 
-                // get blob's edge points
-                blobCounter.GetBlobsLeftAndRightEdges(blob,
-                    out leftPoints, out rightPoints);
+            List<IntPoint> leftPoints, rightPoints, edgePoints = new List<IntPoint>();
 
-                edgePoints.AddRange(leftPoints);
-                edgePoints.AddRange(rightPoints);
+            // get blob's edge points
+            blobCounter.GetBlobsLeftAndRightEdges(blob,
+                out leftPoints, out rightPoints);
 
-                // blob's convex hull
-                List<IntPoint> hull = hullFinder.FindHull(edgePoints);
+            edgePoints.AddRange(leftPoints);
+            edgePoints.AddRange(rightPoints);
 
-                Drawing.Polygon(data, hull, Color.Red);
-            }
+            // blob's convex hull
+            List<IntPoint> hull = hullFinder.FindHull(edgePoints);
+            IntPoint middle = getMiddle(hull);
+            handleHull(hull, middle);
+
+            Drawing.FillRectangle(data, new Rectangle(middle.X, middle.Y, 10, 10), Color.Red);
+            Drawing.Polygon(data, hull, Color.Red);
+
 
             grayImage.UnlockBits(data);
 
             pictureBox1.Image = grayImage;
+        }
+        private IntPoint getMiddle(List<IntPoint> hull)
+        {
+            IntPoint ret;
+            int Mx = 0, My = 0;
+            foreach (IntPoint h in hull)
+            {
+                Mx += h.X;
+                My += h.Y;
+            }
+            Mx = Mx / hull.Count;
+            My = My / hull.Count;
+            ret = new IntPoint(Mx, My);
+            return ret;
+        }
+
+        private void handleHull(List<IntPoint> hull, IntPoint middle)
+        {
+            List<int> distances = new List<int>();
+            int x;
+            foreach (IntPoint P in hull)
+            {
+                x = middle.X - P.X;
+                x = Math.Abs(x);
+                distances.Add(x);
+            }
+            distances.Sort();
+            if (distances.First() > 30)
+            {
+               // R.ForwardAsync();
+            }
+            else
+            {
+               // R.StopMoving();
+            }
+
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -132,7 +168,7 @@ namespace RobotControledByGesture
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (cam.IsRunning)
+            if (cam!=null && cam.IsRunning)
             {
                 cam.Stop();
             }

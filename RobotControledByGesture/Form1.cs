@@ -45,15 +45,6 @@ namespace RobotControledByGesture
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-                R.ForwardAsync();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            R.StopMoving();
-        }
 
         private void button3_Click(object sender, EventArgs e)
         {

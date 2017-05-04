@@ -181,7 +181,7 @@ namespace RobotControledByGesture
                     if (diff > -20 && diff < 20)
                     {
                         R.StopMoving();
-                        Debug.Print("Stup");
+                        Debug.Print("Stop");
                     }
                     else
                     {

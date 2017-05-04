@@ -59,11 +59,15 @@ namespace RobotControledByGesture
 
             Threshold filter = new Threshold(Treshold);
             Grayscale GRfilter = new Grayscale(0.2125, 0.7154, 0.0721);
+            EuclideanColorFiltering euclidFilter = new EuclideanColorFiltering(new RGB(186,187,209), 120);
             var Mir = new Mirror(false, true);
 
             Mir.ApplyInPlace(bitmap);
+            euclidFilter.ApplyInPlace(bitmap);
             Bitmap grayImage = GRfilter.Apply(bitmap);
             filter.ApplyInPlace(grayImage);
+
+
 
 
 
@@ -99,10 +103,10 @@ namespace RobotControledByGesture
 
             // blob's convex hull
             List<IntPoint> hull = hullFinder.FindHull(edgePoints);
-            IntPoint middle = getMiddle(hull);
-            handleHull(hull, middle);
+            //IntPoint middle = getMiddle(hull);
+            //handleHull(hull, middle);
 
-            Drawing.FillRectangle(data, new Rectangle(middle.X, middle.Y, 10, 10), Color.Red);
+            //Drawing.FillRectangle(data, new Rectangle(middle.X, middle.Y, 10, 10), Color.Red);
             Drawing.Polygon(data, hull, Color.Red);
 
 

@@ -109,8 +109,8 @@ namespace RobotControledByGesture
             BlobCounter blobCounter = new BlobCounter();
             blobCounter.ObjectsOrder = ObjectsOrder.Size;
             blobCounter.FilterBlobs = true;
-            blobCounter.MinWidth = 100;
-            blobCounter.MinHeight = 100;
+            blobCounter.MinWidth = (int)blobWidthNumeric.Value; 
+            blobCounter.MinHeight = (int)blobHeightNumeric.Value;
 
             blobCounter.ProcessImage(grayImage);
             return blobCounter;
@@ -120,8 +120,8 @@ namespace RobotControledByGesture
         {
             Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone();
 
-            Threshold filter = new Threshold((int)tresholdNumeric.Value);
-            Grayscale GRfilter = new Grayscale(0.2125, 0.7154, 0.0721);
+          //  Threshold filter = new Threshold((int)tresholdNumeric.Value);
+         //   Grayscale GRfilter = new Grayscale(0.2125, 0.7154, 0.0721);
             EuclideanColorFiltering euclidFilter = new EuclideanColorFiltering(new RGB((byte)RNumeric.Value, (byte)GNumeric.Value, (byte)BNumeric.Value), (byte)radiusNumeric.Value);
             var Mir = new Mirror(false, true);
 
@@ -133,10 +133,10 @@ namespace RobotControledByGesture
             Bitmap cloneBitmap = bitmap.Clone(cloneRect, format);
 
             euclidFilter.ApplyInPlace(cloneBitmap);
-            Bitmap grayImage = GRfilter.Apply(cloneBitmap);
-            filter.ApplyInPlace(grayImage);
+           // Bitmap grayImage = GRfilter.Apply(cloneBitmap);
+         //   filter.ApplyInPlace(grayImage);
 
-            return grayImage;
+            return cloneBitmap;
         }
 
         private IntPoint getMiddle(List<IntPoint> hull)
@@ -175,7 +175,7 @@ namespace RobotControledByGesture
                 {//Runn
                     if (diff > -20 && diff < 20)
                     {
-                        if (talk) R.ForwardAsync();
+                        if (talk) R.ForwardAsync((int)maxSpeedNumeric.Value);
                         updateInfoLabel("run");
                     }
                     else
@@ -183,12 +183,12 @@ namespace RobotControledByGesture
 
                         if (diff > 0)
                         {
-                            if (talk) R.LeftRunAsync();
+                            if (talk) R.LeftRunAsync((int)runTurnNumeric.Value);
                             updateInfoLabel("Run + Left");
                         }
                         else
                         {
-                            if (talk) R.RightRunAsync();
+                            if (talk) R.RightRunAsync((int)runTurnNumeric.Value);
                             updateInfoLabel("Run + Right");
                         }
                     }
@@ -205,12 +205,12 @@ namespace RobotControledByGesture
 
                         if (diff > 0)
                         {
-                            if (talk) R.LeftAsync();
+                            if (talk) R.LeftAsync((int)turningSpeedNumeric.Value);
                             updateInfoLabel("Stop + Left");
                         }
                         else
                         {
-                            if (talk) R.RightAsync();
+                            if (talk) R.RightAsync((int)turningSpeedNumeric.Value);
                             updateInfoLabel("Stop + Right");
                         }
                     };
@@ -271,7 +271,8 @@ namespace RobotControledByGesture
         {
             connectButton.Visible = true;
             robotCheckBox.Visible = true;
-            beepButton.Visible = true;
+            testConectionBox.Visible = true;
+            robotSettingsBox.Visible = true;
         }
 
         private void connectButton_Click(object sender, EventArgs e)

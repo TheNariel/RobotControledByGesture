@@ -50,8 +50,20 @@
             this.comPortCombo = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.infoLabel = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.testConectionBox = new System.Windows.Forms.GroupBox();
             this.beepButton = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.blobWidthNumeric = new System.Windows.Forms.NumericUpDown();
+            this.blobHeightNumeric = new System.Windows.Forms.NumericUpDown();
+            this.robotSettingsBox = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.maxSpeedNumeric = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.turningSpeedNumeric = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.runTurnNumeric = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tresholdNumeric)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -61,7 +73,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.RNumeric)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.testConectionBox.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.blobWidthNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.blobHeightNumeric)).BeginInit();
+            this.robotSettingsBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxSpeedNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.turningSpeedNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.runTurnNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -120,6 +139,7 @@
             0,
             0,
             0});
+            this.tresholdNumeric.Visible = false;
             // 
             // groupBox1
             // 
@@ -132,9 +152,9 @@
             this.groupBox1.Controls.Add(this.BNumeric);
             this.groupBox1.Controls.Add(this.GNumeric);
             this.groupBox1.Controls.Add(this.RNumeric);
-            this.groupBox1.Location = new System.Drawing.Point(338, 99);
+            this.groupBox1.Location = new System.Drawing.Point(338, 96);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 125);
+            this.groupBox1.Size = new System.Drawing.Size(200, 108);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "EuclideanColorFiltering";
@@ -146,7 +166,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(159, 13);
             this.label6.TabIndex = 12;
-            this.label6.Text = "Skin :: RGB(186, 187, 209), 120";
+            this.label6.Text = "Skin :: RGB(186, 187, 209), 180";
             // 
             // label5
             // 
@@ -169,7 +189,7 @@
             this.radiusNumeric.Size = new System.Drawing.Size(42, 20);
             this.radiusNumeric.TabIndex = 9;
             this.radiusNumeric.Value = new decimal(new int[] {
-            120,
+            180,
             0,
             0,
             0});
@@ -310,32 +330,34 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.tresholdNumeric);
-            this.groupBox3.Location = new System.Drawing.Point(338, 230);
+            this.groupBox3.Location = new System.Drawing.Point(457, 210);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(83, 49);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Treshold";
+            this.groupBox3.Visible = false;
             // 
             // infoLabel
             // 
             this.infoLabel.AutoSize = true;
             this.infoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.infoLabel.Location = new System.Drawing.Point(341, 282);
+            this.infoLabel.Location = new System.Drawing.Point(174, 282);
             this.infoLabel.Name = "infoLabel";
             this.infoLabel.Size = new System.Drawing.Size(80, 31);
             this.infoLabel.TabIndex = 10;
             this.infoLabel.Text = "INFO";
             // 
-            // groupBox4
+            // testConectionBox
             // 
-            this.groupBox4.Controls.Add(this.beepButton);
-            this.groupBox4.Location = new System.Drawing.Point(427, 230);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(111, 49);
-            this.groupBox4.TabIndex = 11;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Test Conection";
+            this.testConectionBox.Controls.Add(this.beepButton);
+            this.testConectionBox.Location = new System.Drawing.Point(544, 12);
+            this.testConectionBox.Name = "testConectionBox";
+            this.testConectionBox.Size = new System.Drawing.Size(108, 49);
+            this.testConectionBox.TabIndex = 11;
+            this.testConectionBox.TabStop = false;
+            this.testConectionBox.Text = "Test Conection";
+            this.testConectionBox.Visible = false;
             // 
             // beepButton
             // 
@@ -345,15 +367,160 @@
             this.beepButton.TabIndex = 0;
             this.beepButton.Text = "Beep";
             this.beepButton.UseVisualStyleBackColor = true;
-            this.beepButton.Visible = false;
             this.beepButton.Click += new System.EventHandler(this.beepButton_Click);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.label8);
+            this.groupBox5.Controls.Add(this.label7);
+            this.groupBox5.Controls.Add(this.blobHeightNumeric);
+            this.groupBox5.Controls.Add(this.blobWidthNumeric);
+            this.groupBox5.Location = new System.Drawing.Point(338, 210);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(111, 74);
+            this.groupBox5.TabIndex = 12;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Blob min size (picture: 320; 240)";
+            // 
+            // blobWidthNumeric
+            // 
+            this.blobWidthNumeric.Location = new System.Drawing.Point(6, 46);
+            this.blobWidthNumeric.Maximum = new decimal(new int[] {
+            320,
+            0,
+            0,
+            0});
+            this.blobWidthNumeric.Name = "blobWidthNumeric";
+            this.blobWidthNumeric.Size = new System.Drawing.Size(42, 20);
+            this.blobWidthNumeric.TabIndex = 1;
+            this.blobWidthNumeric.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // blobHeightNumeric
+            // 
+            this.blobHeightNumeric.Location = new System.Drawing.Point(54, 46);
+            this.blobHeightNumeric.Maximum = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+            this.blobHeightNumeric.Name = "blobHeightNumeric";
+            this.blobHeightNumeric.Size = new System.Drawing.Size(42, 20);
+            this.blobHeightNumeric.TabIndex = 2;
+            this.blobHeightNumeric.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // robotSettingsBox
+            // 
+            this.robotSettingsBox.Controls.Add(this.label11);
+            this.robotSettingsBox.Controls.Add(this.runTurnNumeric);
+            this.robotSettingsBox.Controls.Add(this.label10);
+            this.robotSettingsBox.Controls.Add(this.turningSpeedNumeric);
+            this.robotSettingsBox.Controls.Add(this.label9);
+            this.robotSettingsBox.Controls.Add(this.maxSpeedNumeric);
+            this.robotSettingsBox.Location = new System.Drawing.Point(544, 67);
+            this.robotSettingsBox.Name = "robotSettingsBox";
+            this.robotSettingsBox.Size = new System.Drawing.Size(108, 137);
+            this.robotSettingsBox.TabIndex = 13;
+            this.robotSettingsBox.TabStop = false;
+            this.robotSettingsBox.Text = "Robot Speed Settings";
+            this.robotSettingsBox.Visible = false;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(9, 30);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(35, 13);
+            this.label7.TabIndex = 3;
+            this.label7.Text = "Width";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(57, 30);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(38, 13);
+            this.label8.TabIndex = 4;
+            this.label8.Text = "Height";
+            // 
+            // maxSpeedNumeric
+            // 
+            this.maxSpeedNumeric.Location = new System.Drawing.Point(9, 47);
+            this.maxSpeedNumeric.Name = "maxSpeedNumeric";
+            this.maxSpeedNumeric.Size = new System.Drawing.Size(41, 20);
+            this.maxSpeedNumeric.TabIndex = 0;
+            this.maxSpeedNumeric.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 31);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(48, 13);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "Run     +";
+            // 
+            // turningSpeedNumeric
+            // 
+            this.turningSpeedNumeric.Location = new System.Drawing.Point(9, 86);
+            this.turningSpeedNumeric.Name = "turningSpeedNumeric";
+            this.turningSpeedNumeric.Size = new System.Drawing.Size(40, 20);
+            this.turningSpeedNumeric.TabIndex = 2;
+            this.turningSpeedNumeric.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(8, 70);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(63, 13);
+            this.label10.TabIndex = 3;
+            this.label10.Text = "Stop + Turn";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(56, 31);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(29, 13);
+            this.label11.TabIndex = 5;
+            this.label11.Text = "Turn";
+            // 
+            // runTurnNumeric
+            // 
+            this.runTurnNumeric.Location = new System.Drawing.Point(59, 47);
+            this.runTurnNumeric.Name = "runTurnNumeric";
+            this.runTurnNumeric.Size = new System.Drawing.Size(40, 20);
+            this.runTurnNumeric.TabIndex = 4;
+            this.runTurnNumeric.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 317);
-            this.Controls.Add(this.groupBox4);
+            this.ClientSize = new System.Drawing.Size(660, 315);
+            this.Controls.Add(this.robotSettingsBox);
+            this.Controls.Add(this.groupBox5);
+            this.Controls.Add(this.testConectionBox);
             this.Controls.Add(this.infoLabel);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -363,7 +530,7 @@
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.pictureBox1);
             this.Name = "Form1";
-            this.Text = "Webcam Capture";
+            this.Text = "Insis - Robot controled by gesture";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -377,7 +544,16 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
+            this.testConectionBox.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.blobWidthNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.blobHeightNumeric)).EndInit();
+            this.robotSettingsBox.ResumeLayout(false);
+            this.robotSettingsBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxSpeedNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.turningSpeedNumeric)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.runTurnNumeric)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -406,8 +582,20 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label infoLabel;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox testConectionBox;
         private System.Windows.Forms.Button beepButton;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.NumericUpDown blobHeightNumeric;
+        private System.Windows.Forms.NumericUpDown blobWidthNumeric;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.GroupBox robotSettingsBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown maxSpeedNumeric;
+        private System.Windows.Forms.NumericUpDown turningSpeedNumeric;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown runTurnNumeric;
     }
 }
 

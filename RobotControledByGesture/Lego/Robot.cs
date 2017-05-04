@@ -34,33 +34,33 @@ namespace RobotControledByGesture.Lego
             await brick.DirectCommand.StopMotorAsync(OutputPort.All, true);
         }
 
-        public async void ForwardAsync()
+        public async void ForwardAsync(int speed)
         {
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.All, 50, 100, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.All, speed, 100, false);
         }
 
-        public async void LeftAsync()
+        public async void LeftAsync(int speed)
         {
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, +30, 500, false);
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, -30, 500, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, +speed, 100, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, -speed, 100, false);
         }
 
-        public async void RightAsync()
+        public async void RightAsync(int speed)
         {
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, -30, 500, false);
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, +30, 500, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, -speed, 100, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, +speed, 500, false);
         }
 
-        public async void LeftRunAsync()
+        public async void LeftRunAsync(int speed)
         {
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, +40, 500, false);
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, 20, 500, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, speed, 100, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, speed/2, 100, false);
         }
 
-        public async void RightRunAsync()
+        public async void RightRunAsync(int speed)
         {
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, 20, 500, false);
-            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, +40, 500, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.A, speed/2, 100, false);
+            await brick.DirectCommand.TurnMotorAtSpeedForTimeAsync(OutputPort.D, speed, 100, false);
         }
 
         public async void PlayToneAsync(int volume,ushort frequency,ushort duration)

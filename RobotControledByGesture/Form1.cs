@@ -142,15 +142,20 @@ namespace RobotControledByGesture
         private IntPoint getMiddle(List<IntPoint> hull)
         {
             IntPoint ret;
-            int Mx = 0, My = 0;
+            int My = 0;
+            List<int> Mx=new List<int>();
             foreach (IntPoint h in hull)
             {
-                Mx += h.X;
+                My += h.Y;
+
+                Mx.Add(h.X);
             }
 
-            Mx = Mx / hull.Count;
-            My = (hull[hull.Count / 2].Y + hull[(hull.Count / 2) - 1].Y + hull[(hull.Count / 2) + 1].Y) / 3;
-            ret = new IntPoint(Mx, My);
+            My = My / hull.Count;
+            Mx.Sort();
+            //Mx = Mx / hull.Count;
+
+            ret = new IntPoint(Mx[Mx.Count/2], My);
             return ret;
         }
 

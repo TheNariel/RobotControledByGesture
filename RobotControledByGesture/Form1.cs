@@ -61,8 +61,7 @@ namespace RobotControledByGesture
             {
                 Blob blob = blobs[0];
                 List<IntPoint> hull = getHull(blob, grayImage);
-
-                IntPoint middle = getMiddle(hull);
+                IntPoint middle = (IntPoint)blob.CenterOfGravity;//getMiddle(hull);
 
                 handleHull(hull, middle);
 
@@ -73,7 +72,10 @@ namespace RobotControledByGesture
 
                 Drawing.FillRectangle(data, new Rectangle(middle.X, middle.Y, 10, 10), Color.Red);
                 Drawing.Polygon(data, hull, Color.Red);
-
+                foreach (IntPoint item in hull)
+                {
+                    Drawing.FillRectangle(data, new Rectangle(item.X, item.Y, 5, 5), Color.Blue);
+                }
 
                 grayImage.UnlockBits(data);
             }
@@ -91,7 +93,7 @@ namespace RobotControledByGesture
 
             edgePoints.AddRange(leftPoints);
             edgePoints.AddRange(rightPoints);
-
+            
             // blob's convex hull
             return hullFinder.FindHull(edgePoints);
         }
@@ -150,7 +152,7 @@ namespace RobotControledByGesture
 
                 Mx.Add(h.X);
             }
-
+            
             My = My / hull.Count;
             Mx.Sort();
             //Mx = Mx / hull.Count;
@@ -172,13 +174,14 @@ namespace RobotControledByGesture
                 }
                 Y.Sort();
                 X.Sort();
+
                 int diffXMax = Math.Abs(middle.X - X.First());
                 int diffXMin = Math.Abs(middle.X - X.Last());
                 int distance = Math.Abs(Y.Last() - Y.First());
                 int diff = diffXMax - diffXMin;
-                if (distance > 150)
+                if (distance > (int)runStopNumeric.Value)
                 {//Runn
-                    if (diff > -20 && diff < 20)
+                    if (diff > -(int)leftRightNumeric.Value && diff < (int)leftRightNumeric.Value)
                     {
                         if (talk) R.ForwardAsync((int)maxSpeedNumeric.Value);
                         updateInfoLabel("run");
@@ -200,7 +203,7 @@ namespace RobotControledByGesture
                 }
                 else
                 {//Stop
-                    if (diff > -20 && diff < 20)
+                    if (diff > -(int)leftRightNumeric.Value && diff < (int)leftRightNumeric.Value)
                     {
                         if (talk) R.StopMoving();
                         updateInfoLabel("Stop");
